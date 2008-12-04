@@ -1,3 +1,4 @@
 from django.db import models
 
-# Create your models here.
+class LintModel(models.Model):
+    nullable_charfield = models.CharField(max_length=100, null=True)
