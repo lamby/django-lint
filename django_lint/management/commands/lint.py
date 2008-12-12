@@ -1,7 +1,7 @@
 from optparse import make_option
 from pylint import checkers, lint
 
-from django_lint import astcheckers
+from django_lint import AstCheckers
 
 from django.core.management.base import AppCommand
 
@@ -20,9 +20,11 @@ class Command(AppCommand):
         linter = lint.PyLinter()
         linter.set_option('reports', options['report'])
         checkers.initialize(linter)
-        linter.disable_message('C0111') # Missing docstring is just annoying
+
+        for msg in ('C0111', 'C0301'):
+            linter.disable_message(msg)
 
         # Register custom checkers
-        astcheckers.register(linter)
+        AstCheckers.register(linter)
 
-        linter.check(name)
+        linter.check([name, 'settings'])

@@ -7,5 +7,6 @@ setup(
         'django_lint',
         'django_lint.management',
         'django_lint.management.commands',
+        'django_lint.AstCheckers',
     ],
 )
