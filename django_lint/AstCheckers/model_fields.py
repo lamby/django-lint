@@ -10,6 +10,9 @@ class ModelFieldsChecker(BaseChecker):
     name = 'django_model_fields'
     msgs = {
         'W6000': ('Nullable CharField', '',),
+        'W6001': (
+            'Naive tree structure implementation using ForeignKey(\'self\')',
+        '',),
     }
 
     def visit_callfunc(self, node):
@@ -17,17 +20,23 @@ class ModelFieldsChecker(BaseChecker):
         if not val:
             return
 
-        full_name = "%s.%s" % (val.root().name, val.name)
-        if full_name != 'django.db.models.fields.CharField':
+        if not val.root().name.startswith('django.db.models.fields'):
             return
 
+        if val.name == 'ForeignKey':
+            val = safe_infer(node.args[0])
+            if val and val.value == 'self':
+                self.add_message('W6001', line=node.lineno)
+
+        # Check kwargs
         for arg in node.args:
-            if not isinstance(arg, astng.Keyword) or arg.name != 'null':
+            if not isinstance(arg, astng.Keyword):
                 continue
 
             expr = safe_infer(arg.expr)
             if not expr:
                 continue
 
-            if isinstance(expr, astng.Const) and expr.value:
+            if val.name == 'CharField' and arg.name == 'null' and \
+                    isinstance(expr, astng.Const) and expr.value is True:
                 self.add_message('W6000', line=node.lineno)
