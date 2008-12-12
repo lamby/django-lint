@@ -9,6 +9,9 @@ class LintModel(models.Model):
 
     parent = models.ForeignKey('self')
 
+    def __str__(self):
+        return "__str__ method"
+
 class Model1(models.Model):
     pass
 class Model2(models.Model):
