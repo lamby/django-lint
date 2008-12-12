@@ -8,3 +8,22 @@ class LintModel(models.Model):
     charfield = models.CharField(max_length=100)
 
     parent = models.ForeignKey('self')
+
+class Model1(models.Model):
+    pass
+class Model2(models.Model):
+    pass
+class Model3(models.Model):
+    pass
+class Model4(models.Model):
+    pass
+class Model5(models.Model):
+    pass
+class Model6(models.Model):
+    pass
+class Model7(models.Model):
+    pass
+class Model8(models.Model):
+    pass
+class Model9(models.Model):
+    pass
