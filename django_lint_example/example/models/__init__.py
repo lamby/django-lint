@@ -13,6 +13,9 @@ class MyModel(models.Model):
     def __str__(self):
         return "__str__ method"
 
+class NullBlankModel(models.Model):
+    number = models.IntegerField(blank=True)
+
 class BigModel(models.Model):
     field01 = models.CharField(max_length=100)
     field02 = models.CharField(max_length=100)
@@ -45,10 +48,9 @@ class BigModel(models.Model):
     field29 = models.CharField(max_length=100)
     field30 = models.CharField(max_length=100)
 
-class Model2(models.Model):
+class NoFieldsModel(models.Model):
     pass
-class Model3(models.Model):
-    pass
+
 class Model4(models.Model):
     pass
 class Model5(models.Model):
