@@ -20,4 +20,4 @@ class SizeChecker(BaseChecker):
                 continue
 
             if node.file.endswith('__init__.py'):
-                self.add_message('W8001', args=node.name)
+                self.add_message('W8001', args=node.name, node=node)

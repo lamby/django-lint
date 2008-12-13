@@ -26,7 +26,7 @@ class ModelFieldsChecker(BaseChecker):
         if val.name == 'ForeignKey':
             val = safe_infer(node.args[0])
             if val and val.value == 'self':
-                self.add_message('W6001', line=node.lineno)
+                self.add_message('W6001', node=node)
 
         # Check kwargs
         for arg in node.args:
@@ -39,4 +39,4 @@ class ModelFieldsChecker(BaseChecker):
 
             if val.name == 'CharField' and arg.name == 'null' and \
                     isinstance(expr, astng.Const) and expr.value is True:
-                self.add_message('W6000', line=node.lineno)
+                self.add_message('W6000', node=node)
