@@ -4,6 +4,8 @@ from pylint.interfaces import IASTNGChecker
 from pylint.checkers import BaseChecker
 from pylint.checkers.utils import safe_infer
 
+from utils import is_model
+
 class ModelMethodsChecker(BaseChecker):
     __implements__ = IASTNGChecker
 
@@ -18,21 +20,13 @@ class ModelMethodsChecker(BaseChecker):
     def visit_module(self, node):
         self.model_count = 0
 
-    def leave_class(self, node):
-        is_model = False
-        for b in node.bases:
-            val = safe_infer(b)
-            if not val:
-                continue
-
-            if "%s.%s" % (val.root().name, val.name) == 'django.db.models.base.Model':
-                is_model = True
-                self.model_count += 1
-                if self.model_count == 10:
-                    self.add_message('W8010')
-
-        if not is_model:
+    def visit_class(self, node):
+        if not is_model(node):
             return
+
+        self.model_count += 1
+        if self.model_count == 10:
+            self.add_message('W8010', node=node.root())
 
         if '__str__' in node.locals:
             self.add_message('W8011', node=node.locals['__str__'][0])
