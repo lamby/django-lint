@@ -15,13 +15,21 @@ class ModelFieldsChecker(BaseChecker):
         'W6001': (
             'Naive tree structure implementation using ForeignKey(\'self\')',
         '',),
-        'W6002': (
-            'Too many fields; consider splitting model',
-        '',),
+        'W6002': ('Too many fields; consider splitting model', '',),
+        'W6003': ('Model has no fields', '',),
     }
 
     def visit_class(self, node):
         self.field_count = 0
+
+    def leave_class(self, node):
+        if not is_model(node):
+            return
+
+        if self.field_count == 0:
+            self.add_message('W6003', node=node)
+        elif self.field_count >= 30:
+            self.add_message('W6002', node=node)
 
     def visit_callfunc(self, node):
         if not is_model(node.frame()):
@@ -34,8 +42,6 @@ class ModelFieldsChecker(BaseChecker):
             return
 
         self.field_count += 1
-        if self.field_count == 30:
-            self.add_message('W6002', node=node.frame())
 
         if val.name == 'ForeignKey':
             val = safe_infer(node.args[0])
