@@ -48,15 +48,23 @@ class ModelFieldsChecker(BaseChecker):
             if val and val.value == 'self':
                 self.add_message('W6001', node=node)
 
-        # Check kwargs
+        # Prase kwargs
+        options = {
+            'null': False,
+            'blank': False,
+        }
+
         for arg in node.args:
             if not isinstance(arg, astng.Keyword):
                 continue
 
             expr = safe_infer(arg.expr)
-            if not expr:
+            if not expr or not isinstance(expr, astng.Const):
                 continue
 
-            if val.name == 'CharField':
-                if arg.name == 'null' and isinstance(expr, astng.Const) and expr.value is True:
-                    self.add_message('W6000', node=node)
+            for option in ('null', 'blank'):
+                if arg.name == option and expr.value is True:
+                    options[option] = True
+
+        if val.name == 'CharField' and options['null']:
+            self.add_message('W6000', node=node)
