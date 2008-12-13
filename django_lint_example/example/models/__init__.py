@@ -5,6 +5,7 @@ TRUE_VALUE = True
 class LintModel(models.Model):
     nullable_charfield = models.CharField(max_length=100, null=True)
     nullable_charfield_2 = models.CharField(max_length=100, null=TRUE_VALUE)
+
     charfield = models.CharField(max_length=100)
 
     parent = models.ForeignKey('self')
@@ -13,7 +14,37 @@ class LintModel(models.Model):
         return "__str__ method"
 
 class Model1(models.Model):
-    pass
+    field01 = models.CharField(max_length=100)
+    field02 = models.CharField(max_length=100)
+    field03 = models.CharField(max_length=100)
+    field04 = models.CharField(max_length=100)
+    field05 = models.CharField(max_length=100)
+    field06 = models.CharField(max_length=100)
+    field07 = models.CharField(max_length=100)
+    field08 = models.CharField(max_length=100)
+    field09 = models.CharField(max_length=100)
+    field10 = models.CharField(max_length=100)
+    field11 = models.CharField(max_length=100)
+    field12 = models.CharField(max_length=100)
+    field13 = models.CharField(max_length=100)
+    field14 = models.CharField(max_length=100)
+    field15 = models.CharField(max_length=100)
+    field16 = models.CharField(max_length=100)
+    field17 = models.CharField(max_length=100)
+    field18 = models.CharField(max_length=100)
+    field19 = models.CharField(max_length=100)
+    field20 = models.CharField(max_length=100)
+    field21 = models.CharField(max_length=100)
+    field22 = models.CharField(max_length=100)
+    field23 = models.CharField(max_length=100)
+    field24 = models.CharField(max_length=100)
+    field25 = models.CharField(max_length=100)
+    field26 = models.CharField(max_length=100)
+    field27 = models.CharField(max_length=100)
+    field28 = models.CharField(max_length=100)
+    field29 = models.CharField(max_length=100)
+    field30 = models.CharField(max_length=100)
+
 class Model2(models.Model):
     pass
 class Model3(models.Model):
