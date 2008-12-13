@@ -20,13 +20,15 @@ class ModelMethodsChecker(BaseChecker):
     def visit_module(self, node):
         self.model_count = 0
 
+    def leave_module(self, node):
+        if self.model_count >= 10:
+            self.add_message('W8010', node=node.root())
+
     def visit_class(self, node):
         if not is_model(node):
             return
 
         self.model_count += 1
-        if self.model_count == 10:
-            self.add_message('W8010', node=node.root())
 
         if '__str__' in node.locals:
             self.add_message('W8011', node=node.locals['__str__'][0])
