@@ -5,11 +5,8 @@ Ideas
 =====
 
  * Detecting default managers
- * Fields that are nullable but not blank (and vice versa?)
- * Ordering of model methods
  * Determining whether you have a poor code/applications ratio.
  * Oldforms (?)
- * auto_now_add
  * Overring definition of model. Eg:
     class MyModel(models.Model):
     	foo = [..]
