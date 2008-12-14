@@ -26,7 +26,7 @@ class ModelFieldsChecker(BaseChecker):
             'Use TextField instead of CharField with huge (%d/%d) max_length',
         ''),
         'W6008': (
-            'Date-related field uses brittle auto_now or auto_now_add',
+            'Date-related field uses deprecated auto_now or auto_now_add',
         ''),
         'W6009': (
             'Use NullBooleanField instead of BooleanField with null=True',
