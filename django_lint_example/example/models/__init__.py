@@ -19,8 +19,13 @@ class ParentModel(models.Model):
     parent = models.ForeignKey('self')
 
 class StrModel(models.Model):
+    dummy = models.CharField(max_length=1)
+
     def __str__(self):
         return "__str__ method"
+
+    def __unicode__(self):
+        return self.dummy
 
 class NullBlankModel(models.Model):
     number = models.IntegerField(blank=True)
