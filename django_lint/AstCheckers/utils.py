@@ -6,8 +6,8 @@ def is_model(node):
     if not isinstance(node, astng.Class):
         return False
 
-    for b in node.bases:
-        val = safe_infer(b)
+    for base in node.bases:
+        val = safe_infer(base)
         if not val:
             continue
 
