@@ -1,15 +1,24 @@
 from django.db import models
 
-TRUE_VALUE = True
+class NullableModel(models.Model):
+    TRUTH_VALUE = True
 
-class MyModel(models.Model):
-    nullable_charfield = models.CharField(max_length=100, null=True)
-    nullable_charfield_2 = models.CharField(max_length=100, null=TRUE_VALUE)
+    charfield = models.CharField(max_length=100, null=True, blank=True)
+    charfield_2 = models.CharField(max_length=100, null=TRUTH_VALUE)
+    textfield = models.TextField(null=True, blank=True)
 
-    charfield = models.CharField(max_length=100)
+    boolean = models.BooleanField(null=True, blank=True)
 
+class UniqueForModels(models.Model):
+    time = models.DateTimeField()
+    u_date = models.IntegerField(unique_for_date='time')
+    u_month = models.IntegerField(unique_for_month='time')
+    u_year = models.IntegerField(unique_for_year='time')
+
+class ParentModel(models.Model):
     parent = models.ForeignKey('self')
 
+class StrModel(models.Model):
     def __str__(self):
         return "__str__ method"
 
@@ -17,49 +26,101 @@ class NullBlankModel(models.Model):
     number = models.IntegerField(blank=True)
 
 class BigModel(models.Model):
-    field01 = models.CharField(max_length=100)
-    field02 = models.CharField(max_length=100)
-    field03 = models.CharField(max_length=100)
-    field04 = models.CharField(max_length=100)
-    field05 = models.CharField(max_length=100)
-    field06 = models.CharField(max_length=100)
-    field07 = models.CharField(max_length=100)
-    field08 = models.CharField(max_length=100)
-    field09 = models.CharField(max_length=100)
-    field10 = models.CharField(max_length=100)
-    field11 = models.CharField(max_length=100)
-    field12 = models.CharField(max_length=100)
-    field13 = models.CharField(max_length=100)
-    field14 = models.CharField(max_length=100)
-    field15 = models.CharField(max_length=100)
-    field16 = models.CharField(max_length=100)
-    field17 = models.CharField(max_length=100)
-    field18 = models.CharField(max_length=100)
-    field19 = models.CharField(max_length=100)
-    field20 = models.CharField(max_length=100)
-    field21 = models.CharField(max_length=100)
-    field22 = models.CharField(max_length=100)
-    field23 = models.CharField(max_length=100)
-    field24 = models.CharField(max_length=100)
-    field25 = models.CharField(max_length=100)
-    field26 = models.CharField(max_length=100)
-    field27 = models.CharField(max_length=100)
-    field28 = models.CharField(max_length=100)
-    field29 = models.CharField(max_length=100)
-    field30 = models.CharField(max_length=100)
+    field01 = models.IntegerField()
+    field02 = models.IntegerField()
+    field03 = models.IntegerField()
+    field04 = models.IntegerField()
+    field05 = models.IntegerField()
+    field06 = models.IntegerField()
+    field07 = models.IntegerField()
+    field08 = models.IntegerField()
+    field09 = models.IntegerField()
+    field10 = models.IntegerField()
+    field11 = models.IntegerField()
+    field12 = models.IntegerField()
+    field13 = models.IntegerField()
+    field14 = models.IntegerField()
+    field15 = models.IntegerField()
+    field16 = models.IntegerField()
+    field17 = models.IntegerField()
+    field18 = models.IntegerField()
+    field19 = models.IntegerField()
+    field20 = models.IntegerField()
+    field21 = models.IntegerField()
+    field22 = models.IntegerField()
+    field23 = models.IntegerField()
+    field24 = models.IntegerField()
+    field25 = models.IntegerField()
+    field26 = models.IntegerField()
+    field27 = models.IntegerField()
+    field28 = models.IntegerField()
+    field29 = models.IntegerField()
+    field30 = models.IntegerField()
+    field31 = models.IntegerField()
 
 class NoFieldsModel(models.Model):
     pass
 
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.CharField(max_length=1000)
+    views = models.PositiveSmallIntegerField()
+    words = models.SmallIntegerField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return self.title
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post)
+    url = models.URLField()
+
+    def __unicode__(self):
+        return self.url
+
+class MisorderedMethodsModel(models.Model):
+    dummy = models.CharField(max_length=1)
+
+    def incorrect_place(self):
+        pass
+
+    def get_absolute_url(self):
+        pass
+
+    def __unicode__(self):
+        # This should be swapped with get_absolute_url
+        pass
+
+    def correct_place(self):
+        pass
+
+class Model1(models.Model):
+    dummy = models.CharField(max_length=1)
+
+    def __unicode__(self):
+        return self.dummy
+
+class Model2(models.Model):
+    dummy = models.CharField(max_length=1)
+
+    def __unicode__(self):
+        return self.dummy
+
+class Model3(models.Model):
+    dummy = models.CharField(max_length=1)
+
+    def __unicode__(self):
+        return self.dummy
+
 class Model4(models.Model):
-    pass
+    dummy = models.CharField(max_length=1)
+
+    def __unicode__(self):
+        return self.dummy
+
 class Model5(models.Model):
-    pass
-class Model6(models.Model):
-    pass
-class Model7(models.Model):
-    pass
-class Model8(models.Model):
-    pass
-class Model9(models.Model):
-    pass
+    dummy = models.CharField(max_length=1)
+
+    def __unicode__(self):
+        return self.dummy
