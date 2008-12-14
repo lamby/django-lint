@@ -1,8 +1,5 @@
-from logilab import astng
-
 from pylint.interfaces import IASTNGChecker
 from pylint.checkers import BaseChecker
-from pylint.checkers.utils import safe_infer
 
 class SizeChecker(BaseChecker):
     __implements__ = IASTNGChecker
