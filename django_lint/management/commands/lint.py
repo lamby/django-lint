@@ -1,7 +1,5 @@
 from optparse import make_option
-from pylint import checkers, lint
 
-from django_lint import AstCheckers
 
 from django.core.management.base import AppCommand
 
@@ -16,6 +14,9 @@ class Command(AppCommand):
 
     def handle_app(self, app, **options):
         name = app.__name__.rsplit('.', 1)[0]
+
+        from pylint import checkers, lint
+        from django_lint import AstCheckers
 
         linter = lint.PyLinter()
         linter.set_option('reports', options['report'])
