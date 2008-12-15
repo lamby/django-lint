@@ -20,10 +20,12 @@ class Command(AppCommand):
 
         linter = lint.PyLinter()
         linter.set_option('reports', options['report'])
-        checkers.initialize(linter)
 
+        """
+        checkers.initialize(linter)
         for msg in ('C0111', 'C0301'):
             linter.disable_message(msg)
+        """
 
         # Register custom checkers
         AstCheckers.register(linter)
