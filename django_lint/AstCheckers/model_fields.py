@@ -50,10 +50,6 @@ class ModelFieldsChecker(BaseChecker):
         }),
     )
 
-
-    def visit_class(self, node):
-        self.field_count = 0
-
     def leave_class(self, node):
         if not is_model(node):
             return
@@ -63,6 +59,8 @@ class ModelFieldsChecker(BaseChecker):
         elif self.field_count >= self.config.max_model_fields:
             self.add_message('W6002', node=node,
                 args=(self.field_count, self.config.max_model_fields))
+
+        self.field_count = 0
 
     def visit_callfunc(self, node):
         if not is_model(node.frame()):
@@ -74,7 +72,10 @@ class ModelFieldsChecker(BaseChecker):
             # Not a field
             return
 
-        self.field_count += 1
+        try:
+            self.field_count += 1
+        except AttributeError:
+            self.field_count = 1
 
         # Prase kwargs
         options = dict([(option, False) for option in (
