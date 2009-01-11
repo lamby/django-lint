@@ -4,9 +4,10 @@ from distutils.core import setup
 setup(
     name='django_lint',
     packages=[
-        'django_lint',
-        'django_lint.management',
-        'django_lint.management.commands',
-        'django_lint.AstCheckers',
+        'DjangoLint',
+        'DjangoLint.AstCheckers',
     ],
+    scripts='django-lint',
+    author='Chris Lamb',
+    author_email='chris@chris-lamb.co.uk',
 )

@@ -14,7 +14,7 @@ class SettingsChecker(BaseChecker):
     }
 
     def leave_module(self, node):
-        if node.name != 'settings':
+        if node.name.split('.')[-1] != 'settings':
             return
 
         REQUIRED_FIELDS = {
