@@ -35,13 +35,32 @@ def main():
     if len(args) != 1:
         raise parser.error("The 'target' argument is mandatory")
 
-    target = args[0]
+    target = os.path.abspath(args[0])
 
     if not os.path.exists(target):
         raise parser.error(
             "The specified target (%r) does not exist" \
                 % target
         )
+
+    path = target
+    while True:
+        flag = False
+        for django_file in ('manage.py', 'models.py', 'urls.py'):
+            if os.path.exists(os.path.join(path, django_file)):
+                sys.path.insert(0, os.path.dirname(path))
+                flag = True
+                break
+        if flag:
+            break
+
+        path = os.path.dirname(path)
+
+        if path == '/':
+            raise parser.error(
+                "The specified target (%r) does not appear to be part of a " \
+                "Django application" % target
+            )
 
     linter = lint.PyLinter()
     linter.set_option('reports', options.report)
