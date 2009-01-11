@@ -1,24 +1,57 @@
 #!/usr/bin/env python
 
+import os
 import sys
 
-from optparse import OptionParser
 from pylint import checkers, lint
+from optparse import OptionParser
 
 from DjangoLint import AstCheckers
 
 def main():
+    usage = """ %prog target [options]
+
+    Django Lint is a tool that statically analyses Django projects and
+    applications, checking for programming errors and bad code smells. For
+    example, it reports nullable "CharField" fields, as well as reporting for
+    unspecified options in settings.py.
+
+    The `target` argument is mandatory and can specify either a directory
+    containing a Django project, a single application or a single file.
+    """.rstrip()
+
+    parser = OptionParser(usage=usage)
+    parser.add_option(
+        '-r',
+        '--reports',
+        dest='report',
+        action='store_true',
+        default=False,
+        help='generate report',
+    )
+
+    options, args = parser.parse_args()
+
+    if len(args) != 1:
+        raise parser.error("The 'target' argument is mandatory")
+
+    target = args[0]
+
+    if not os.path.exists(target):
+        raise parser.error(
+            "The specified target (%r) does not exist" \
+                % target
+        )
+
     linter = lint.PyLinter()
-    linter.set_option('reports', options['report'])
+    linter.set_option('reports', options.report)
     checkers.initialize(linter)
 
     for msg in ('C0111', 'C0301'):
         linter.disable_message(msg)
 
-    # Register custom checkers
     AstCheckers.register(linter)
-
-    linter.check([name, 'settings'])
+    linter.check([target])
 
     return 0
 
