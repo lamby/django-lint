@@ -8,7 +8,7 @@ setup(
         'DjangoLint',
         'DjangoLint.AstCheckers',
     ],
-    scripts='django-lint',
+    scripts=('django-lint',),
     author='Chris Lamb',
     author_email='chris@chris-lamb.co.uk',
 )
