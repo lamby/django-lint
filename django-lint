@@ -9,7 +9,7 @@ from optparse import OptionParser
 from DjangoLint import AstCheckers
 
 def main():
-    usage = """ %prog target [options]
+    usage = """ %prog [options] target
 
     Django Lint is a tool that statically analyses Django projects and
     applications, checking for programming errors and bad code smells. For
