@@ -1,0 +1,5 @@
+python-django-lint (0.1) unstable; urgency=low
+
+  * Initial release. (Closes: #FIXME)
+
+ -- Chris Lamb <lamby@debian.org>  Sun, 11 Jan 2009 22:13:33 +0000
