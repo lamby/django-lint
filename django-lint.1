@@ -1,0 +1,24 @@
+.TH DJANGO-LINT 1 "Jan 11, 2009"
+.SH NAME
+django-lint - static analyser for Django projects and applications
+.SH SYNOPSIS
+.PP
+\fBdjango-lint \fR\fI[options]\fR \fr\fItarget\fR
+.SH DESCRIPTION
+.PP
+Django Lint is a tool that statically analyses projects and applications
+that use the Django web development framework.
+.PP
+It checks and reports on common programming errors and bad code smells
+including nullable "CharField" fields, the use of brittle Django features
+such as "auto_now_add" and unspecified recommended options in settings.py,
+such as an empty 'ADMINS' setting (plus many more).
+.PP
+The \fBtarget\fR argument is mandatory and can specify either a directory
+containing a Django project, a single application or a single file.
+.SH "AUTHOR"
+.PP
+Django Lint and this manual page were written by Chris Lamb <chris@chris-lamb.co.uk>.
+.PP
+This manual page is (C) 2008 by Chris Lamb and is licensed under the terms of
+the GPLv3 or higher.
