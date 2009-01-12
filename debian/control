@@ -11,7 +11,7 @@ Vcs-Browser: http://git.chris-lamb.co.uk/?p=django-lint.git
 Package: python-django-lint
 Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}, pylint, python-django (>= 1.0)
-Description: Static analysis tool for Django 
+Description: Static analysis tool for Django projects and applications
  Django Lint is a tool that statically analyses projects and applications
  that use the Django web development framework.
  .
