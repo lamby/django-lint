@@ -131,8 +131,9 @@ class ModelFieldsChecker(BaseChecker):
                 self.add_message('W6007', node=node, args=(options['max_length'],
                     self.config.max_charfield_length))
 
-        elif val.name == 'BooleanField' and options['null']:
-            self.add_message('W6009', node=node)
+        elif val.name == 'BooleanField':
+            if options['null']:
+                self.add_message('W6009', node=node)
 
         elif val.name == 'ForeignKey':
             val = safe_infer(node.args[0])
