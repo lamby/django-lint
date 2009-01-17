@@ -51,6 +51,9 @@ class ModelFieldsChecker(BaseChecker):
         ''),
         'W6010': ('%s field has database-dependent limits', ''),
         'W6011': ('URLField uses verify_exists=True default', ''),
+        'W6012': (
+            'BooleanField with default=True will not be reflected in database',
+        ''),
     }
 
     options = (
@@ -99,6 +102,7 @@ class ModelFieldsChecker(BaseChecker):
         options = dict([(option, False) for option in (
             'null',
             'blank',
+            'default',
             'auto_now',
             'auto_now_add',
             'verify_exists',
@@ -134,6 +138,8 @@ class ModelFieldsChecker(BaseChecker):
         elif val.name == 'BooleanField':
             if options['null']:
                 self.add_message('W6009', node=node)
+            if options['default']:
+                self.add_message('W6012', node=node)
 
         elif val.name == 'ForeignKey':
             val = safe_infer(node.args[0])
