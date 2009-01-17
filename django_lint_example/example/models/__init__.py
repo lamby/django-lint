@@ -8,6 +8,7 @@ class NullableModel(models.Model):
     textfield = models.TextField(null=True, blank=True)
 
     boolean = models.BooleanField(null=True, blank=True)
+    boolean_false = models.BooleanField(default=True)
 
 class UniqueForModels(models.Model):
     time = models.DateTimeField()
