@@ -48,12 +48,12 @@ class ModelMethodsChecker(BaseChecker):
     )
 
     def visit_module(self, node):
-        self.model_count = 0
+        self.model_names = []
 
     def leave_module(self, node):
-        if self.model_count >= self.config.max_models:
+        if len(self.model_names) >= self.config.max_models:
             self.add_message('W8010', node=node.root(),
-                args=(self.model_count, self.config.max_models))
+                args=(len(self.model_names), self.config.max_models))
 
     def visit_function(self, node):
         if not is_model(node.parent.frame()):
@@ -89,6 +89,6 @@ class ModelMethodsChecker(BaseChecker):
         if '__unicode__' not in [x.name for x in node.mymethods()]:
             self.add_message('W8014', node=node)
 
-        self.model_count += 1
+        self.model_names.append(node.name)
         self.prev_idx = None
         self.prev_name = None
