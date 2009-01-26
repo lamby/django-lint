@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os.path
+
 from logilab import astng
 
 from pylint.interfaces import IASTNGChecker
@@ -23,6 +25,18 @@ from pylint.checkers import BaseChecker
 from pylint.checkers.utils import safe_infer
 
 from utils import is_model
+
+try:
+    from itertools import combinations
+except ImportError:
+    # Python <= 2.5 fallback
+    def combinations(iterable, r):
+        if r:
+            for i, cur in enumerate(iterable):
+                for xs in combinations(iterable[:i] + iterable[i + 1:], r - 1):
+                    yield [cur] + xs
+        else:
+            yield []
 
 class ModelMethodsChecker(BaseChecker):
     __implements__ = IASTNGChecker
@@ -36,6 +50,9 @@ class ModelMethodsChecker(BaseChecker):
         'W8012': ('Method should come after standard model methods', '',),
         'W8013': ('Standard model method should come before %r', '',),
         'W8014': ('Missing __unicode__ method', '',),
+        'W8015': (
+            '%d models have common prefix (%r) - rename or split application',
+        '',),
     }
 
     options = (
@@ -54,6 +71,16 @@ class ModelMethodsChecker(BaseChecker):
         if len(self.model_names) >= self.config.max_models:
             self.add_message('W8010', node=node.root(),
                 args=(len(self.model_names), self.config.max_models))
+
+        for names in combinations(self.model_names, 4):
+            common = os.path.commonprefix(names)
+            if len(common) >= 4:
+                # How many actually have this prefix?
+                xs = filter(lambda x: x.startswith(common), self.model_names)
+
+                self.add_message('W8015', node=node.root(),
+                    args=(len(xs), common,))
+                break
 
     def visit_function(self, node):
         if not is_model(node.parent.frame()):
