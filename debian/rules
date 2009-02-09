@@ -1,3 +1,7 @@
 #!/usr/bin/make -f
+clean:
+	dh $@
+	rm -rf *.egg-info
+
 %:
 	dh $@
