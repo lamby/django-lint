@@ -17,15 +17,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from distutils.core import setup
-
-setup(
+setup_args = dict(
     name='django_lint',
     packages=[
         'DjangoLint',
         'DjangoLint.AstCheckers',
     ],
-    scripts=('django-lint',),
     author='Chris Lamb',
     author_email='chris@chris-lamb.co.uk',
 )
+
+try:
+    from setuptools import setup
+    setup_args['entry_points'] = {
+        "console_scripts" : ['django-lint = DjangoLint.script:main',]
+    }
+except ImportError:
+    from distutils.core import setup
+    setup_args['scripts']=['django-lint',]
+
+setup(**setup_args)
