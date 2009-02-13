@@ -57,10 +57,12 @@ def main():
 
     options, args = parser.parse_args()
 
-    if len(args) != 1:
-        raise parser.error("The 'target' argument is mandatory")
+    try:
+        target = args[0]
+    except IndexError:
+        target = '.'
 
-    target = os.path.abspath(args[0])
+    target = os.path.abspath(target)
 
     if not os.path.exists(target):
         raise parser.error(
