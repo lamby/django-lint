@@ -46,6 +46,14 @@ def main():
         default=False,
         help='generate report',
     )
+    parser.add_option(
+        '-p',
+        '--pylint',
+        dest='pylint',
+        action='store_true',
+        default=False,
+        help='run normal PyLint checks',
+    )
 
     options, args = parser.parse_args()
 
@@ -81,10 +89,11 @@ def main():
 
     linter = lint.PyLinter()
     linter.set_option('reports', options.report)
-    checkers.initialize(linter)
 
-    for msg in ('C0111', 'C0301'):
-        linter.disable_message(msg)
+    if options.pylint:
+        checkers.initialize(linter)
+        for msg in ('C0111', 'C0301'):
+            linter.disable_message(msg)
 
     AstCheckers.register(linter)
     linter.check([target])
