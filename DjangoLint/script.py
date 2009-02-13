@@ -90,6 +90,3 @@ def main():
     linter.check([target])
 
     return 0
-
-if __name__ == "__main__":
-    sys.exit(main())
