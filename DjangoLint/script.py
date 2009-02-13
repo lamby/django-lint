@@ -87,6 +87,12 @@ def main():
                 "Django application" % target
             )
 
+    try:
+        import django
+    except ImportError:
+        print >>sys.stderr, "E: Cannot import `django' module, exiting.."
+        return 1
+
     linter = lint.PyLinter()
     linter.set_option('reports', options.report)
 
