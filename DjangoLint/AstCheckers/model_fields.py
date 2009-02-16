@@ -78,7 +78,7 @@ class ModelFieldsChecker(BaseChecker):
         if not is_model(node):
             return
 
-        if self.field_count == 0:
+        if is_model(node, check_base_classes=False) and self.field_count == 0:
             self.add_message('W6003', node=node)
         elif self.field_count >= self.config.max_model_fields:
             self.add_message('W6002', node=node,
