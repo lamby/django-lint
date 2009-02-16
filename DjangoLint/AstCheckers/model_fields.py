@@ -71,6 +71,9 @@ class ModelFieldsChecker(BaseChecker):
         }),
     )
 
+    def visit_module(self, node):
+        self.field_count = 0
+
     def leave_class(self, node):
         if not is_model(node):
             return
@@ -93,10 +96,7 @@ class ModelFieldsChecker(BaseChecker):
             # Not a field
             return
 
-        try:
-            self.field_count += 1
-        except AttributeError:
-            self.field_count = 1
+        self.field_count += 1
 
         # Prase kwargs
         options = dict([(option, False) for option in (
