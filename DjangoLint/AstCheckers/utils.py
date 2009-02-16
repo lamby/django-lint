@@ -18,6 +18,7 @@
 
 from logilab import astng
 
+from itertools import chain
 from pylint.checkers.utils import safe_infer
 
 def is_model(node):
@@ -29,7 +30,9 @@ def is_model(node):
         if not val:
             continue
 
-        if "%s.%s" % (val.root().name, val.name) == 'django.db.models.base.Model':
-            return True
+        for node in chain([val], val.ancestors()):
+            qual = '%s.%s' % (node.root().name, node.name)
+            if qual == 'django.db.models.base.Model':
+                return True
 
     return False

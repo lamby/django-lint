@@ -130,3 +130,12 @@ class Model5(models.Model):
 
     def __unicode__(self):
         return self.dummy
+
+class AbstractModel(models.Model):
+    foo = models.CharField(max_length=1)
+
+    class Meta:
+        abstract = True
+
+class DerivedModel(AbstractModel):
+    bar = models.CharField(max_length=1)
