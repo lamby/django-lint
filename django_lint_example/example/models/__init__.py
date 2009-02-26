@@ -10,6 +10,8 @@ class NullableModel(models.Model):
     boolean = models.BooleanField(null=True, blank=True)
     boolean_false = models.BooleanField(default=True)
 
+    nullable_boolean = models.NullBooleanField()
+
 class UniqueForModels(models.Model):
     time = models.DateTimeField()
     u_date = models.IntegerField(unique_for_date='time')

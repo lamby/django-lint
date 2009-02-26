@@ -47,7 +47,7 @@ class ModelFieldsChecker(BaseChecker):
             'Date-related field uses deprecated auto_now or auto_now_add',
         ''),
         'W6009': (
-            'Use NullBooleanField instead of BooleanField with null=True',
+            'Use BooleanField with null=True instead of NullBooleanField',
         ''),
         'W6010': ('%s field has database-dependent limits', ''),
         'W6011': ('URLField uses verify_exists=True default', ''),
@@ -136,8 +136,6 @@ class ModelFieldsChecker(BaseChecker):
                     self.config.max_charfield_length))
 
         elif val.name == 'BooleanField':
-            if options['null']:
-                self.add_message('W6009', node=node)
             if options['default']:
                 self.add_message('W6012', node=node)
 
@@ -156,6 +154,8 @@ class ModelFieldsChecker(BaseChecker):
         elif val.name in ('PositiveSmallIntegerField', 'SmallIntegerField'):
             self.add_message('W6010', node=node, args=val.name)
 
+        elif val.name == 'NullBooleanField':
+            self.add_message('W6009', node=node)
 
         # Generic checks
         if options['null'] and not options['blank']:
