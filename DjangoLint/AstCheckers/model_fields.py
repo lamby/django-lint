@@ -41,15 +41,15 @@ class ModelFieldsChecker(BaseChecker):
         'W6005': ('%s: uses brittle unique_for_%s', ''),
         'W6006': ('%s: ForeignKey missing related_name', ''),
         'W6007': (
-            '%s: Use TextField instead of CharField with huge (%d/%d) max_length',
+            '%s: CharField with huge (%d/%d) max_length instead of TextField',
         ''),
         'W6008': (
-            '%s: Date-related field uses deprecated auto_now or auto_now_add',
+            '%s: Uses deprecated auto_now or auto_now_add',
         ''),
         'W6009': (
-            '%s: Is a NullBooleanField instead of BooleanField with null=True',
+            '%s: NullBooleanField instead of BooleanField with null=True',
         ''),
-        'W6010': ('%s: %s field has database-dependent limits', ''),
+        'W6010': ('%s: %s has database-dependent limits', ''),
         'W6011': ('%s: URLField uses verify_exists=True default', ''),
         'W6012': (
             '%s: BooleanField with default=True will not be reflected in database',
