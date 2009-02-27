@@ -12,6 +12,10 @@ class NullableModel(models.Model):
 
     nullable_boolean = models.NullBooleanField()
 
+    # We should still report about the following field, but we cannot
+    # determine its name.
+    models.NullBooleanField()
+
 class UniqueForModels(models.Model):
     time = models.DateTimeField()
     u_date = models.IntegerField(unique_for_date='time')
