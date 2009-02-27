@@ -103,7 +103,7 @@ class ModelFieldsChecker(BaseChecker):
 
         self.field_count += 1
 
-        # Prase kwargs
+        # Parse kwargs
         options = dict([(option, False) for option in (
             'null',
             'blank',
