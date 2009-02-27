@@ -29,30 +29,30 @@ class ModelFieldsChecker(BaseChecker):
 
     name = 'django_model_fields'
     msgs = {
-        'W6000': ('Nullable CharField or TextField', ''),
+        'W6000': ('%s: Nullable CharField or TextField', ''),
         'W6001': (
-            "Naive tree structure implementation using ForeignKey('self')",
+            "%s: Naive tree structure implementation using ForeignKey('self')",
         ''),
         'W6002': (
             'Model has too many fields (%d/%d); consider splitting model',
         ''),
         'W6003': ('Model has no fields', ''),
-        'W6004': ('Field is nullable but blank=False', ''),
-        'W6005': ('Field uses brittle unique_for_%s', ''),
-        'W6006': ('ForeignKey field missing related_name', ''),
+        'W6004': ('%s: Field is nullable but blank=False', ''),
+        'W6005': ('%s: uses brittle unique_for_%s', ''),
+        'W6006': ('%s: ForeignKey missing related_name', ''),
         'W6007': (
-            'Use TextField instead of CharField with huge (%d/%d) max_length',
+            '%s: Use TextField instead of CharField with huge (%d/%d) max_length',
         ''),
         'W6008': (
-            'Date-related field uses deprecated auto_now or auto_now_add',
+            '%s: Date-related field uses deprecated auto_now or auto_now_add',
         ''),
         'W6009': (
-            'Use BooleanField with null=True instead of NullBooleanField',
+            '%s: Is a NullBooleanField instead of BooleanField with null=True',
         ''),
-        'W6010': ('%s field has database-dependent limits', ''),
-        'W6011': ('URLField uses verify_exists=True default', ''),
+        'W6010': ('%s: %s field has database-dependent limits', ''),
+        'W6011': ('%s: URLField uses verify_exists=True default', ''),
         'W6012': (
-            'BooleanField with default=True will not be reflected in database',
+            '%s: BooleanField with default=True will not be reflected in database',
         ''),
     }
 
@@ -96,6 +96,11 @@ class ModelFieldsChecker(BaseChecker):
             # Not a field
             return
 
+        assname = '(unknown name)'
+        x = node.parent.getChildNodes()[0]
+        if isinstance(x, astng.AssName):
+            assname = x.name
+
         self.field_count += 1
 
         # Prase kwargs
@@ -128,42 +133,45 @@ class ModelFieldsChecker(BaseChecker):
         # Field type specific checks
         if val.name in ('CharField', 'TextField'):
             if options['null']:
-                self.add_message('W6000', node=node)
+                self.add_message('W6000', node=node, args=(assname,))
 
             if val.name == 'CharField' and \
                     options['max_length'] >= self.config.max_charfield_length:
-                self.add_message('W6007', node=node, args=(options['max_length'],
-                    self.config.max_charfield_length))
+                self.add_message('W6007', node=node, args=(
+                    assname,
+                    options['max_length'],
+                    self.config.max_charfield_length,
+                ))
 
         elif val.name == 'BooleanField':
             if options['default']:
-                self.add_message('W6012', node=node)
+                self.add_message('W6012', node=node, args=(assname,))
 
         elif val.name == 'ForeignKey':
             val = safe_infer(node.args[0])
             if isinstance(val, astng.Const) and val.value == 'self':
-                self.add_message('W6001', node=node)
+                self.add_message('W6001', node=node, args=(assname,))
 
             elif not options['related_name']:
-                self.add_message('W6006', node=node)
+                self.add_message('W6006', node=node, args=(assname,))
 
         elif val.name == 'URLField':
             if options['verify_exists'] is not None:
-                self.add_message('W6011', node=node)
+                self.add_message('W6011', node=node, args=(assname,))
 
         elif val.name in ('PositiveSmallIntegerField', 'SmallIntegerField'):
-            self.add_message('W6010', node=node, args=val.name)
+            self.add_message('W6010', node=node, args=(assname, val.name))
 
         elif val.name == 'NullBooleanField':
-            self.add_message('W6009', node=node)
+            self.add_message('W6009', node=node, args=(assname,))
 
         # Generic checks
         if options['null'] and not options['blank']:
-            self.add_message('W6004', node=node)
+            self.add_message('W6004', node=node, args=(assname,))
 
         if options['auto_now'] or options['auto_now_add']:
-            self.add_message('W6008', node=node)
+            self.add_message('W6008', node=node, args=(assname,))
 
         for suffix in ('date', 'month', 'year'):
             if options['unique_for_%s' % suffix]:
-                self.add_message('W6005', node=node, args=suffix)
+                self.add_message('W6005', node=node, args=(assname, suffix))
