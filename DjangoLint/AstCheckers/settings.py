@@ -29,6 +29,8 @@ class SettingsChecker(BaseChecker):
     msgs = {
         'W7001': ('Missing required field %r', '',),
         'W7002': ('Empty %r setting', '',),
+        'W7003': ('SessionMiddleware after AuthenticationMiddleware', ''),
+        'W7004': ('ConditionalGetMiddleware after CommonMiddleware', ''),
     }
 
     def leave_module(self, node):
@@ -54,3 +56,26 @@ class SettingsChecker(BaseChecker):
 
                 if val and not val.nodes:
                     self.add_message('W7002', args=field, node=ass)
+
+
+        ass = node.locals['MIDDLEWARE_CLASSES'][-1]
+        middleware = [x.value for x in safe_infer(ass)
+            if isinstance(safe_infer(x), astng.Const)
+        ]
+
+        SESSION = 'django.contrib.sessions.middleware.SessionMiddleware'
+        AUTH = 'django.contrib.auth.middleware.AuthenticationMiddleware'
+        CGET = 'django.middleware.http.ConditionalGetMiddleware'
+        COMMON = 'django.middleware.common.CommonMiddleware'
+
+        try:
+            if middleware.index(SESSION) > middleware.index(AUTH):
+                self.add_message('W7003', node=node)
+        except ValueError:
+            pass
+
+        try:
+            if middleware.index(CGET) > middleware.index(COMMON):
+                self.add_message('W7004', node=node)
+        except ValueError:
+            pass
