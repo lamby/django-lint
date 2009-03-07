@@ -57,7 +57,7 @@ class ModelMethodsChecker(BaseChecker):
 
     options = (
         ('max-models', {
-            'default': 15,
+            'default': 10,
             'type': 'int',
             'metavar': '<int>',
             'help': 'Maximum number of models per module',
