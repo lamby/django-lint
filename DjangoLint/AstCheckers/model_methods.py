@@ -118,6 +118,9 @@ class ModelMethodsChecker(BaseChecker):
         self.prev_name = None
 
     def leave_class(self, node):
+        if not is_model(node):
+            return
+
         if node.name == 'Meta' and is_model(node.parent.parent):
             # Annotate the model with information from the Meta class
             try:
