@@ -58,7 +58,7 @@ class ModelFieldsChecker(BaseChecker):
 
     options = (
         ('max-model-fields', {
-            'default': 30,
+            'default': 20,
             'type': 'int',
             'metavar': '<int>',
             'help': 'Maximum number of fields for a model',
