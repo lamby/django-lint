@@ -30,10 +30,12 @@ def is_model(node, check_base_classes=True):
         if not val:
             continue
 
+        nodes = [val]
         if check_base_classes:
-            nodes = chain([val], val.ancestors())
-        else:
-            nodes = [val]
+            try:
+                nodes = chain([val], val.ancestors())
+            except TypeError:
+                pass
 
         for node in nodes:
             qual = '%s.%s' % (node.root().name, node.name)
