@@ -122,9 +122,6 @@ class ModelMethodsChecker(BaseChecker):
         self.prev_name = None
 
     def leave_class(self, node):
-        if not is_model(node):
-            return
-
         if node.name == 'Meta' and is_model(node.parent.parent):
             # Annotate the model with information from the Meta class
             try:
@@ -135,7 +132,9 @@ class ModelMethodsChecker(BaseChecker):
                 pass
             return
 
+        if not is_model(node):
+            return
+
         if '__unicode__' not in [x.name for x in node.mymethods()] and \
                     not hasattr(node, '_django_abstract'):
             self.add_message('W8014', node=node)
-
