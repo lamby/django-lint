@@ -75,6 +75,10 @@ class ModelMethodsChecker(BaseChecker):
         for names in combinations(self.model_names, 4):
             common = os.path.commonprefix(names)
             if len(common) >= 4:
+                # Whitelist a few common names
+                if common.lower() in ('abstract',):
+                    continue
+
                 # How many actually have this prefix?
                 xs = filter(lambda x: x.startswith(common), self.model_names)
 
