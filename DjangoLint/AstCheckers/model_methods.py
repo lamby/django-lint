@@ -98,6 +98,7 @@ class ModelMethodsChecker(BaseChecker):
                 '__unicode__',
                 '__str__',
                 'save',
+                'delete',
                 'get_absolute_url',
             ].index(node.name)
 
