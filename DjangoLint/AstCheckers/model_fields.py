@@ -64,7 +64,7 @@ class ModelFieldsChecker(BaseChecker):
             'help': 'Maximum number of fields for a model',
         }),
         ('max-charfield-length', {
-            'default': 500,
+            'default': 512,
             'type': 'int',
             'metavar': '<int>',
             'help': 'Maximum size of max_length on a CharField',
