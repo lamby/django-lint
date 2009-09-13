@@ -31,6 +31,7 @@ class SettingsChecker(BaseChecker):
         'W7002': ('Empty %r setting', '',),
         'W7003': ('SessionMiddleware after AuthenticationMiddleware', ''),
         'W7004': ('ConditionalGetMiddleware after CommonMiddleware', ''),
+        'W7005': ('Non-absolute directory %r in TEMPLATE_DIRS', ''),
     }
 
     def leave_module(self, node):
@@ -39,6 +40,7 @@ class SettingsChecker(BaseChecker):
 
         self.check_required_fields(node)
         self.check_middleware(node)
+        self.check_template_dirs(node)
 
     def check_required_fields(self, node):
         REQUIRED_FIELDS = {
@@ -96,3 +98,12 @@ class SettingsChecker(BaseChecker):
                 self.add_message('W7004', node=node)
         except ValueError:
             pass
+
+    def check_template_dirs(self, node):
+        template_dirs = self.get_constant_values(node, 'TEMPLATE_DIRS')
+        if template_dirs is None:
+            return
+
+        for dirname in template_dirs:
+            if not (dirname.startswith('/') or dirname[1:].startswith(':')):
+                self.add_message('W7005', args=dirname, node=node)
