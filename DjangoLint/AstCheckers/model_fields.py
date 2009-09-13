@@ -54,6 +54,9 @@ class ModelFieldsChecker(BaseChecker):
         'W6012': (
             '%s: BooleanField with default=True will not be reflected in database',
         ''),
+        'W6013': (
+            '%s: Unique ForeignKey constraint better modelled as OneToOneField',
+        ''),
     }
 
     options = (
@@ -107,8 +110,10 @@ class ModelFieldsChecker(BaseChecker):
         options = dict([(option, False) for option in (
             'null',
             'blank',
+            'unique',
             'default',
             'auto_now',
+            'primary_key',
             'auto_now_add',
             'verify_exists',
             'related_name',
@@ -151,6 +156,9 @@ class ModelFieldsChecker(BaseChecker):
 
             elif not options['related_name']:
                 self.add_message('W6006', node=node, args=(assname,))
+
+            if options['primary_key'] or options['unique']:
+                self.add_message('W6013', node=node, args=(assname,))
 
         elif val.name == 'URLField':
             if options['verify_exists'] is not None:

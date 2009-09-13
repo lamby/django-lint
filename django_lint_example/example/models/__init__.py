@@ -24,6 +24,10 @@ class UniqueForModels(models.Model):
 class ParentModel(models.Model):
     parent = models.ForeignKey('self')
 
+class WeirdPrimaryKeyModel(models.Model):
+    primary_key = models.ForeignKey(NullableModel, primary_key=True)
+    unique_field = models.ForeignKey(NullableModel, unique=True)
+
 class StrModel(models.Model):
     dummy = models.CharField(max_length=1)
 
