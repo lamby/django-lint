@@ -76,7 +76,7 @@ class SettingsChecker(BaseChecker):
         except AttributeError:
             return
 
-        return [x.value for x in xs if isinstance(safe_infer(x), astng.Const)]
+        return [(x, x.value) for x in xs if isinstance(safe_infer(x), astng.Const)]
 
     def check_middleware(self, node):
         middleware = self.get_constant_values(node, 'MIDDLEWARE_CLASSES')
@@ -88,15 +88,18 @@ class SettingsChecker(BaseChecker):
         CGET = 'django.middleware.http.ConditionalGetMiddleware'
         COMMON = 'django.middleware.common.CommonMiddleware'
 
+        lookup_table_a = [y for x, y in middleware]
+        lookup_table_b = dict((y, x) for x, y in middleware)
+
         try:
-            if middleware.index(SESSION) > middleware.index(AUTH):
-                self.add_message('W7003', node=node)
+            if lookup_table_a.index(SESSION) > lookup_table_a.index(AUTH):
+                self.add_message('W7003', node=lookup_table_b[SESSION])
         except ValueError:
             pass
 
         try:
-            if middleware.index(CGET) > middleware.index(COMMON):
-                self.add_message('W7004', node=node)
+            if lookup_table_a.index(CGET) > lookup_table_a.index(COMMON):
+                self.add_message('W7004', node=lookup_table_b[CGET])
         except ValueError:
             pass
 
@@ -105,9 +108,9 @@ class SettingsChecker(BaseChecker):
         if template_dirs is None:
             return
 
-        for dirname in template_dirs:
+        for dirnode, dirname in template_dirs:
             if not (dirname.startswith('/') or dirname[1:].startswith(':')):
-                self.add_message('W7005', args=dirname, node=node)
+                self.add_message('W7005', args=dirname, node=dirnode)
 
             if dirname.find('\\') > 0:
-                self.add_message('W7006', args=dirname, node=node)
+                self.add_message('W7006', args=dirname, node=dirnode)
