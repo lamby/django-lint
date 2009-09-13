@@ -37,6 +37,10 @@ class SettingsChecker(BaseChecker):
         if node.name.split('.')[-1] != 'settings':
             return
 
+        self.check_required_fields(node)
+        self.check_middleware(node)
+
+    def check_required_fields(self, node):
         REQUIRED_FIELDS = {
             'DEBUG': bool,
             'TEMPLATE_DEBUG': bool,
@@ -49,8 +53,7 @@ class SettingsChecker(BaseChecker):
             if field not in node.locals.keys():
                 self.add_message('W7001', args=field, node=node)
                 continue
-            
-            
+
             if req_type is tuple:
                 ass = node.locals[field][-1]
                 val = safe_infer(ass)
@@ -58,6 +61,7 @@ class SettingsChecker(BaseChecker):
                 if val and not val.get_children():
                     self.add_message('W7002', args=field, node=ass)
 
+    def check_middleware(self, node):
         ass = node.locals['MIDDLEWARE_CLASSES'][-1]
         middleware = [x.value for x in safe_infer(ass).get_children()
             if isinstance(safe_infer(x), astng.Const)
