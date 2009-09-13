@@ -7,7 +7,6 @@ class NullableModel(models.Model):
     charfield_2 = models.CharField(max_length=100, null=TRUTH_VALUE)
     textfield = models.TextField(null=True, blank=True)
 
-    boolean = models.BooleanField(null=True, blank=True)
     boolean_false = models.BooleanField(default=True)
 
     nullable_boolean = models.NullBooleanField()
