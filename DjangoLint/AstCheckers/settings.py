@@ -32,6 +32,7 @@ class SettingsChecker(BaseChecker):
         'W7003': ('SessionMiddleware after AuthenticationMiddleware', ''),
         'W7004': ('ConditionalGetMiddleware after CommonMiddleware', ''),
         'W7005': ('Non-absolute directory %r in TEMPLATE_DIRS', ''),
+        'W7006': ('%r in TEMPLATE_DIRS should use forward slashes', ''),
     }
 
     def leave_module(self, node):
@@ -107,3 +108,6 @@ class SettingsChecker(BaseChecker):
         for dirname in template_dirs:
             if not (dirname.startswith('/') or dirname[1:].startswith(':')):
                 self.add_message('W7005', args=dirname, node=node)
+
+            if dirname.find('\\') > 0:
+                self.add_message('W7006', args=dirname, node=node)
