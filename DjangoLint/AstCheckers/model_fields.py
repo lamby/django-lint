@@ -97,7 +97,7 @@ class ModelFieldsChecker(BaseChecker):
             return
 
         assname = '(unknown name)'
-        x = node.parent.getChildNodes()[0]
+        x = node.parent.get_children().next()
         if isinstance(x, astng.AssName):
             assname = x.name
 
@@ -122,13 +122,10 @@ class ModelFieldsChecker(BaseChecker):
             if not isinstance(arg, astng.Keyword):
                 continue
 
-            expr = safe_infer(arg.expr)
-            if not expr or not isinstance(expr, astng.Const):
-                continue
 
             for option in options.keys():
-                if arg.name == option:
-                    options[option] = expr.value
+                if arg.arg == option:
+                    options[option] = safe_infer(arg.value).value
 
         # Field type specific checks
         if val.name in ('CharField', 'TextField'):

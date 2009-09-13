@@ -49,17 +49,17 @@ class SettingsChecker(BaseChecker):
             if field not in node.locals.keys():
                 self.add_message('W7001', args=field, node=node)
                 continue
-
+            
+            
             if req_type is tuple:
                 ass = node.locals[field][-1]
                 val = safe_infer(ass)
 
-                if val and not val.nodes:
+                if val and not val.get_children():
                     self.add_message('W7002', args=field, node=ass)
 
-
         ass = node.locals['MIDDLEWARE_CLASSES'][-1]
-        middleware = [x.value for x in safe_infer(ass)
+        middleware = [x.value for x in safe_infer(ass).get_children()
             if isinstance(safe_infer(x), astng.Const)
         ]
 
