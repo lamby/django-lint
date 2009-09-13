@@ -62,20 +62,23 @@ class SettingsChecker(BaseChecker):
                 if val and not val.get_children():
                     self.add_message('W7002', args=field, node=ass)
 
-    def check_middleware(self, node):
+    def get_constant_values(self, node, key):
         try:
-            ass = node.locals['MIDDLEWARE_CLASSES'][-1]
+            ass = node.locals[key][-1]
         except KeyError:
             return
 
         try:
-            children = safe_infer(ass).get_children()
+            xs = safe_infer(ass).get_children()
         except AttributeError:
             return
 
-        middleware = [x.value for x in children
-            if isinstance(safe_infer(x), astng.Const)
-        ]
+        return [x.value for x in xs if isinstance(safe_infer(x), astng.Const)]
+
+    def check_middleware(self, node):
+        middleware = self.get_constant_values(node, 'MIDDLEWARE_CLASSES')
+        if middleware is None:
+            return
 
         SESSION = 'django.contrib.sessions.middleware.SessionMiddleware'
         AUTH = 'django.contrib.auth.middleware.AuthenticationMiddleware'
