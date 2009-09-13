@@ -29,8 +29,7 @@ class SettingsChecker(BaseChecker):
     msgs = {
         'W7001': ('Missing required field %r', '',),
         'W7002': ('Empty %r setting', '',),
-        'W7003': ('SessionMiddleware after AuthenticationMiddleware', ''),
-        'W7004': ('ConditionalGetMiddleware after CommonMiddleware', ''),
+        'W7003': ('%s after %s', ''),
         'W7005': ('Non-absolute directory %r in TEMPLATE_DIRS', ''),
         'W7006': ('%r in TEMPLATE_DIRS should use forward slashes', ''),
     }
@@ -83,25 +82,27 @@ class SettingsChecker(BaseChecker):
         if middleware is None:
             return
 
-        SESSION = 'django.contrib.sessions.middleware.SessionMiddleware'
-        AUTH = 'django.contrib.auth.middleware.AuthenticationMiddleware'
-        CGET = 'django.middleware.http.ConditionalGetMiddleware'
-        COMMON = 'django.middleware.common.CommonMiddleware'
+        relations = ((
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
+        ), (
+            'django.middleware.http.ConditionalGetMiddleware',
+            'django.middleware.common.CommonMiddleware',
+        ))
 
-        lookup_table_a = [y for x, y in middleware]
-        lookup_table_b = dict((y, x) for x, y in middleware)
+        lookup = [y for x, y in middleware]
+        node_lookup = dict([(y, x) for x, y in middleware])
 
-        try:
-            if lookup_table_a.index(SESSION) > lookup_table_a.index(AUTH):
-                self.add_message('W7003', node=lookup_table_b[SESSION])
-        except ValueError:
-            pass
-
-        try:
-            if lookup_table_a.index(CGET) > lookup_table_a.index(COMMON):
-                self.add_message('W7004', node=lookup_table_b[CGET])
-        except ValueError:
-            pass
+        for a, b in relations:
+            try:
+                if lookup.index(a) > lookup.index(b):
+                    self.add_message(
+                        'W7003',
+                        args=tuple([x.split('.')[-1] for x in (a, b)]),
+                        node=node_lookup[a],
+                    )
+            except ValueError:
+                pass
 
     def check_template_dirs(self, node):
         template_dirs = self.get_constant_values(node, 'TEMPLATE_DIRS')
