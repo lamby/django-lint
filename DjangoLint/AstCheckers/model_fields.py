@@ -80,7 +80,7 @@ class ModelFieldsChecker(BaseChecker):
 
         if is_model(node, check_base_classes=False) and self.field_count == 0:
             self.add_message('W6003', node=node)
-        elif self.field_count >= self.config.max_model_fields:
+        elif self.field_count > self.config.max_model_fields:
             self.add_message('W6002', node=node,
                 args=(self.field_count, self.config.max_model_fields))
 
@@ -133,7 +133,7 @@ class ModelFieldsChecker(BaseChecker):
                 self.add_message('W6000', node=node, args=(assname,))
 
             if val.name == 'CharField' and \
-                    options['max_length'] >= self.config.max_charfield_length:
+                    options['max_length'] > self.config.max_charfield_length:
                 self.add_message('W6007', node=node, args=(
                     assname,
                     options['max_length'],
