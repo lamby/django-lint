@@ -24,10 +24,6 @@ class UniqueForModels(models.Model):
 class ParentModel(models.Model):
     parent = models.ForeignKey('self')
 
-class WeirdPrimaryKeyModel(models.Model):
-    primary_key = models.ForeignKey(NullableModel, primary_key=True)
-    unique_field = models.ForeignKey(NullableModel, unique=True)
-
 class StrModel(models.Model):
     dummy = models.CharField(max_length=1)
 
@@ -148,3 +144,7 @@ class AbstractModel(models.Model):
 
 class DerivedModel(AbstractModel):
     bar = models.CharField(max_length=1)
+
+class WeirdPrimaryKeyModel(models.Model):
+    primary_key = models.ForeignKey(Model1, primary_key=True)
+    unique_field = models.ForeignKey(Model2, unique=True)
