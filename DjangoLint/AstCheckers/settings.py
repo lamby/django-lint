@@ -68,7 +68,12 @@ class SettingsChecker(BaseChecker):
         except KeyError:
             return
 
-        middleware = [x.value for x in safe_infer(ass).get_children()
+        try:
+            children = safe_infer(ass).get_children()
+        except AttributeError:
+            return
+
+        middleware = [x.value for x in children
             if isinstance(safe_infer(x), astng.Const)
         ]
 
