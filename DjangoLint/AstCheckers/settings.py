@@ -63,7 +63,11 @@ class SettingsChecker(BaseChecker):
                     self.add_message('W7002', args=field, node=ass)
 
     def check_middleware(self, node):
-        ass = node.locals['MIDDLEWARE_CLASSES'][-1]
+        try:
+            ass = node.locals['MIDDLEWARE_CLASSES'][-1]
+        except KeyError:
+            return
+
         middleware = [x.value for x in safe_infer(ass).get_children()
             if isinstance(safe_infer(x), astng.Const)
         ]
