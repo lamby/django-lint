@@ -47,6 +47,7 @@ class SettingsChecker(BaseChecker):
             'INSTALLED_APPS': tuple,
             'MANAGERS': tuple,
             'ADMINS': tuple,
+            'MIDDLEWARE_CLASSES': tuple,
         }
 
         for field, req_type in REQUIRED_FIELDS.iteritems():
