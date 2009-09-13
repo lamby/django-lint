@@ -148,3 +148,4 @@ class DerivedModel(AbstractModel):
 class WeirdPrimaryKeyModel(models.Model):
     primary_key = models.ForeignKey(Model1, primary_key=True)
     unique_field = models.ForeignKey(Model2, unique=True)
+    not_both = models.ForeignKey(Model3, primary_key=True, unique=False)

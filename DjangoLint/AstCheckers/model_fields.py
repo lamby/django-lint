@@ -57,6 +57,7 @@ class ModelFieldsChecker(BaseChecker):
         'W6013': (
             '%s: Unique ForeignKey constraint better modelled as OneToOneField',
         ''),
+        'W6014': ('%s: primary_key=True should imply unique=True', ''),
     }
 
     options = (
@@ -157,7 +158,9 @@ class ModelFieldsChecker(BaseChecker):
             elif not options['related_name']:
                 self.add_message('W6006', node=node, args=(assname,))
 
-            if options['primary_key'] or options['unique']:
+            if options['primary_key'] and options['unique'] is False:
+                self.add_message('W6014', node=node, args=(assname,))
+            elif options['primary_key'] or options['unique']:
                 self.add_message('W6013', node=node, args=(assname,))
 
         elif val.name == 'URLField':
