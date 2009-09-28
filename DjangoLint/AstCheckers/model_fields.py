@@ -58,6 +58,7 @@ class ModelFieldsChecker(BaseChecker):
             '%s: Unique ForeignKey constraint better modelled as OneToOneField',
         ''),
         'W6014': ('%s: primary_key=True should imply unique=True', ''),
+        'W6015': ('%s: %s=False is implicit', ''),
     }
 
     options = (
@@ -108,7 +109,7 @@ class ModelFieldsChecker(BaseChecker):
         self.field_count += 1
 
         # Parse kwargs
-        options = dict([(option, False) for option in (
+        options = dict([(option, None) for option in (
             'null',
             'blank',
             'unique',
@@ -128,10 +129,14 @@ class ModelFieldsChecker(BaseChecker):
             if not isinstance(arg, astng.Keyword):
                 continue
 
-
             for option in options.keys():
                 if arg.arg == option:
                     options[option] = safe_infer(arg.value).value
+
+        if not val.name.lower().startswith('null'):
+            for option in ('null', 'blank'):
+                if options[option] is False:
+                    self.add_message('W6015', node=node, args=(assname, option,))
 
         # Field type specific checks
         if val.name in ('CharField', 'TextField'):
