@@ -49,7 +49,6 @@ class ModelMethodsChecker(BaseChecker):
         'W8011': ('Use __unicode__ instead of __str__', '',),
         'W8012': ('Method should come after standard model methods', '',),
         'W8013': ('Standard model method should come before %r', '',),
-        'W8014': ('Missing __unicode__ method', '',),
         'W8015': (
             '%d models have common prefix (%r) - rename or split application',
         '',),
@@ -135,7 +134,3 @@ class ModelMethodsChecker(BaseChecker):
 
         if not is_model(node):
             return
-
-        if '__unicode__' not in [x.name for x in node.mymethods()] and \
-                    not hasattr(node, '_django_abstract'):
-            self.add_message('W8014', node=node)
