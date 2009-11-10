@@ -4,18 +4,15 @@ django-lint
 Ideas
 =====
 
- * Detecting default managers
- * Determining whether you have a poor code/applications ratio.
+ * Default manager with restrictive get_query_set()
  * Oldforms (?)
  * Overring definition of model. Eg:
     class MyModel(models.Model):
     	foo = [..]
 	foo = [..]
- * Non-absolute template_dirs
- * Missing __unicode__ (?)
  * Not importing settings via "django.conf import settings"
- * No related_name
  * Not using reverse (or @permalink) in get_absolute_url (?)
+ * Form definitions in models.py
 
 Templates
 =========
