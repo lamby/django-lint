@@ -174,7 +174,7 @@ class ModelFieldsChecker(BaseChecker):
                 self.add_message('W6013', node=node, args=(assname,))
 
         elif val.name == 'URLField':
-            if options['verify_exists'] is not None:
+            if options['verify_exists'] is None:
                 self.add_message('W6011', node=node, args=(assname,))
 
         elif val.name in ('PositiveSmallIntegerField', 'SmallIntegerField'):
