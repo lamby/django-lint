@@ -132,7 +132,11 @@ class ModelFieldsChecker(BaseChecker):
 
             for option in options.keys():
                 if arg.arg == option:
-                    options[option] = safe_infer(arg.value).value
+                    try:
+                        options[option] = safe_infer(arg.value).value
+                    except AttributeError:
+                        # Don't lint this field if we cannot infer everything
+                        return
 
         if not val.name.lower().startswith('null'):
             for option in ('null', 'blank'):
