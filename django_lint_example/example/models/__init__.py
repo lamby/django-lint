@@ -133,6 +133,9 @@ class Model4(models.Model):
 class Model5(models.Model):
     dummy = models.CharField(max_length=1)
 
+    def get_absolute_url(self):
+        return "/"
+
     def __unicode__(self):
         return self.dummy
 
