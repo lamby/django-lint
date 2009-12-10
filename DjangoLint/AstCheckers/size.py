@@ -35,4 +35,8 @@ class SizeChecker(BaseChecker):
                 continue
 
             if node.file.endswith('__init__.py'):
+                # When 'models' is a directory, django.test.simple.run_tests
+                # cannot tell the difference between a tests.py module that is
+                # raising an ImportError and when it doesn't exist (so it
+                # silently discards that app). This is not good!
                 self.add_message('W8001', args=node.name, node=node)
