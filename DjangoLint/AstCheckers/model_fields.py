@@ -59,7 +59,7 @@ class ModelFieldsChecker(BaseChecker):
         ''),
         'W6014': ('%s: primary_key=True should imply unique=True', ''),
         'W6015': ('%s: %s=False is implicit', ''),
-        'W6016': ('%s: ManyToManyField with %s=True makes no sense', ''),
+        'W6016': ('%s: Nullable ManyToManyField makes no sense', ''),
     }
 
     options = (
@@ -184,9 +184,8 @@ class ModelFieldsChecker(BaseChecker):
             self.add_message('W6009', node=node, args=(assname,))
 
         elif val.name == 'ManyToManyField':
-            for option in ('null', 'blank'):
-                if options[option]:
-                    self.add_message('W6016', node=node, args=(assname, option,))
+            if options['null']:
+                self.add_message('W6016', node=node, args=(assname,))
 
         # Generic checks
         if options['null'] and not options['blank']:
