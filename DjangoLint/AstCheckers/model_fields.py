@@ -185,7 +185,8 @@ class ModelFieldsChecker(BaseChecker):
 
         elif val.name == 'ManyToManyField':
             for option in ('null', 'blank'):
-                self.add_message('W6016', node=node, args=(assname, option,))
+                if options[option]:
+                    self.add_message('W6016', node=node, args=(assname, option,))
 
         # Generic checks
         if options['null'] and not options['blank']:
