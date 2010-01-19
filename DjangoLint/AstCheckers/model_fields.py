@@ -43,9 +43,7 @@ class ModelFieldsChecker(BaseChecker):
         'W6007': (
             '%s: CharField with huge (%d/%d) max_length instead of TextField',
         ''),
-        'W6008': (
-            '%s: Uses deprecated auto_now or auto_now_add',
-        ''),
+        'W6008': ('%s: Uses superceded auto_now or auto_now_add', ''),
         'W6009': (
             '%s: NullBooleanField instead of BooleanField with null=True',
         ''),
