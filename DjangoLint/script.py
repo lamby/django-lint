@@ -54,6 +54,14 @@ def main():
         default=False,
         help='run normal PyLint checks',
     )
+    parser.add_option(
+        '-e',
+        '--errors',
+        dest='errors',
+        action='store_true',
+        default=False,
+        help='only show errors',
+    )
 
     options, args = parser.parse_args()
 
@@ -97,6 +105,11 @@ def main():
 
     linter = lint.PyLinter()
     linter.set_option('reports', options.report)
+
+    if options.errors:
+        linter.set_option('disable-msg-cat', 'WCRI')
+        linter.set_option('reports', False)
+        linter.set_option('persistent', False)
 
     if options.pylint:
         checkers.initialize(linter)
