@@ -19,12 +19,14 @@ Models
 
  * Don't count ManyToMany fields on a model as a field
  * Remove common prefix checking.
+ * models.. specifying "objects = " should be last
 
 Views
 =====
 
  * Calling request.is_authenticated without actually calling function
  * order_by('?')
+ * request.method.upper is a no-op (etc.)
 
 URLS
 ====
@@ -43,3 +45,13 @@ Templates
  * {% if foo %}{{ foo }}{% else %}bar{% endif %} => {{ foo|default:"bar" }}
  * {% with foo as bar %} ... [ not using {{ bar }} ] ... {% endwith %}
  * {% endblock %} vs. {% endblock blockname %}
+
+Settings
+========
+ * Ordering of MIDDLEWARE_CLASSES
+ * TEMPLATE_DIRS not absolute
+
+Layout
+======
+ forms not in forms.py
+ managers not in managers.py
