@@ -106,4 +106,4 @@ def main():
     AstCheckers.register(linter)
     linter.check([target])
 
-    return 0
+    return linter.msg_status
