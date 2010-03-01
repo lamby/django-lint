@@ -48,7 +48,7 @@ class ModelMethodsChecker(BaseChecker):
         '',),
         'W8011': ('Use __unicode__ instead of __str__', '',),
         'W8012': ('Method should come after standard model methods', '',),
-        'W8013': ('Standard model method should come before %r', '',),
+        'W8013': ('%s should come before %r', '',),
         'W8015': (
             '%d models have common prefix (%r) - rename or split application',
         '',),
@@ -85,7 +85,7 @@ class ModelMethodsChecker(BaseChecker):
                     args=(len(xs), common,))
                 break
 
-    def _visit_django_attribute(self, node):
+    def _visit_django_attribute(self, node, is_method=True):
         try:
             idx = [
                 'Meta',
@@ -100,7 +100,10 @@ class ModelMethodsChecker(BaseChecker):
                 self.add_message('W8012', node=self.prev_node)
 
             elif idx < self.prev_idx:
-                self.add_message('W8013', node=node, args=self.prev_node.name)
+                noun = is_method and 'Standard model method' or '"Meta" class'
+                self.add_message(
+                    'W8013', node=node, args=(noun, self.prev_node.name)
+                )
 
         except ValueError:
             idx = -1
@@ -125,7 +128,7 @@ class ModelMethodsChecker(BaseChecker):
 
         elif is_model(node.parent.frame()):
             # Nested class
-            self._visit_django_attribute(node)
+            self._visit_django_attribute(node, is_method=False)
 
     def leave_class(self, node):
         if node.name == 'Meta' and is_model(node.parent.parent):
