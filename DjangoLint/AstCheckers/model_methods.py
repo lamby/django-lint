@@ -124,7 +124,7 @@ class ModelMethodsChecker(BaseChecker):
         if is_model(node):
             self.model_names.append(node.name)
             self.prev_idx = None
-            self.prev_name = None
+            self.prev_node = None
 
         elif is_model(node.parent.frame()):
             # Nested class
