@@ -88,6 +88,7 @@ class ModelMethodsChecker(BaseChecker):
     def _visit_django_attribute(self, node):
         try:
             idx = [
+                'Meta',
                 '__unicode__',
                 '__str__',
                 'save',
@@ -117,12 +118,14 @@ class ModelMethodsChecker(BaseChecker):
         self._visit_django_attribute(node)
 
     def visit_class(self, node):
-        if not is_model(node):
-            return
+        if is_model(node):
+            self.model_names.append(node.name)
+            self.prev_idx = None
+            self.prev_name = None
 
-        self.model_names.append(node.name)
-        self.prev_idx = None
-        self.prev_name = None
+        elif is_model(node.parent.frame()):
+            # Nested class
+            self._visit_django_attribute(node)
 
     def leave_class(self, node):
         if node.name == 'Meta' and is_model(node.parent.parent):

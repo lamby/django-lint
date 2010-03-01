@@ -109,6 +109,9 @@ class MisorderedMethodsModel(models.Model):
 class Model1(models.Model):
     dummy = models.CharField(max_length=1)
 
+    class Meta:
+        verbose_name_plural = 'right'
+
     def __unicode__(self):
         return self.dummy
 
@@ -117,6 +120,9 @@ class Model2(models.Model):
 
     def __unicode__(self):
         return self.dummy
+
+    class Meta:
+        verbose_name_plural = 'wrong'
 
 class Model3(models.Model):
     dummy = models.CharField(max_length=1)
