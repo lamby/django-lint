@@ -85,13 +85,7 @@ class ModelMethodsChecker(BaseChecker):
                     args=(len(xs), common,))
                 break
 
-    def visit_function(self, node):
-        if not is_model(node.parent.frame()):
-            return
-
-        if node.name == '__str__':
-            self.add_message('W8011', node=node)
-
+    def _visit_django_attribute(self, node):
         try:
             idx = [
                 '__unicode__',
@@ -112,6 +106,15 @@ class ModelMethodsChecker(BaseChecker):
 
         self.prev_idx = idx
         self.prev_node = node
+
+    def visit_function(self, node):
+        if not is_model(node.parent.frame()):
+            return
+
+        if node.name == '__str__':
+            self.add_message('W8011', node=node)
+
+        self._visit_django_attribute(node)
 
     def visit_class(self, node):
         if not is_model(node):
