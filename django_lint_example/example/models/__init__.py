@@ -125,6 +125,9 @@ class Model2(models.Model):
         verbose_name_plural = 'wrong'
 
 class Model3(models.Model):
+    class Meta:
+        verbose_name_plural = 'wrong'
+
     dummy = models.CharField(max_length=1)
 
     def __unicode__(self):

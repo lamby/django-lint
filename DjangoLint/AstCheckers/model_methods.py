@@ -130,6 +130,15 @@ class ModelMethodsChecker(BaseChecker):
             # Nested class
             self._visit_django_attribute(node, is_method=False)
 
+    def visit_assname(self, node):
+        if not is_model(node.parent.frame()):
+            return
+
+        if self.prev_idx >= 0:
+            self.add_message('W8013', node=node, args=(
+                '%r assignment' % node.name, self.prev_node.name,
+            ))
+
     def leave_class(self, node):
         if node.name == 'Meta' and is_model(node.parent.parent):
             # Annotate the model with information from the Meta class
