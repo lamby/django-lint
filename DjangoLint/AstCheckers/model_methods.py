@@ -71,6 +71,9 @@ class ModelMethodsChecker(BaseChecker):
             self.add_message('W8010', node=node.root(),
                 args=(len(self.model_names), self.config.max_models))
 
+        if not self.model_names:
+            return
+
         for names in combinations(self.model_names, 4):
             common = os.path.commonprefix(names)
             if len(common) >= 4:
