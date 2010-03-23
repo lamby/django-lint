@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib import admin
 
 class NullableModel(models.Model):
     TRUTH_VALUE = True
@@ -165,3 +166,9 @@ class WeirdPrimaryKeyModel(models.Model):
 class ManyToManyModel(models.Model):
     nullable = models.ManyToManyField(Model2, null=True)
     blank = models.ManyToManyField(Model3, blank=True)
+
+class AdminKlass(admin.ModelAdmin):
+    search_fields = ('nullable',)
+
+    class Meta:
+        model = ManyToManyModel
