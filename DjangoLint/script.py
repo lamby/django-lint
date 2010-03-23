@@ -62,6 +62,15 @@ def main():
         default=False,
         help='only show errors',
     )
+    parser.add_option(
+        '-f',
+        '--format',
+        dest='outputformat',
+        metavar='OUTPUT',
+        default='text',
+        help='Set the output format. Available formats are text,'
+        'parseable, colorized, msvs (visual studio) and html',
+    )
 
     options, args = parser.parse_args()
 
@@ -105,7 +114,8 @@ def main():
 
     linter = lint.PyLinter()
     linter.set_option('reports', options.report)
-
+    linter.set_option('output-format', options.outputformat)
+    
     if options.errors:
         linter.set_option('disable-msg-cat', 'WCRI')
         linter.set_option('reports', False)
