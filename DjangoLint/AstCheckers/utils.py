@@ -21,7 +21,10 @@ from logilab import astng
 from itertools import chain
 from pylint.checkers.utils import safe_infer
 
-def is_model(node, check_base_classes=True):
+def is_model(node, **kwargs):
+    return nodeisinstance(node, ('django.db.models.base.Model',), **kwargs)
+
+def nodeisinstance(node, klasses, check_base_classes=True):
     if not isinstance(node, astng.Class):
         return False
 
@@ -39,7 +42,7 @@ def is_model(node, check_base_classes=True):
 
         for node in nodes:
             qual = '%s.%s' % (node.root().name, node.name)
-            if qual == 'django.db.models.base.Model':
+            if qual in klasses:
                 return True
 
     return False
