@@ -27,6 +27,7 @@ Views
  * Calling request.is_authenticated without actually calling function
  * order_by('?')
  * request.method.upper is a no-op (etc.)
+ * cache.set without a timeout
 
 URLS
 ====
