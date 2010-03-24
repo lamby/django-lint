@@ -75,11 +75,19 @@ def main():
     options, args = parser.parse_args()
 
     try:
-        target = args[0]
+        args[0]
     except IndexError:
-        target = '.'
+        args = ['.']
 
-    target = os.path.abspath(target)
+    target = os.path.abspath(args[0])
+
+    if not os.path.exists(target):
+        try:
+            # Is target a module?
+            x = __import__(args[0], locals(), globals(), [], -1)
+            target = sys.modules[args[0]].__path__[0]
+        except:
+            pass
 
     if not os.path.exists(target):
         raise parser.error(
