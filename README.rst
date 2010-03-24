@@ -13,6 +13,7 @@ Ideas
  * Not importing settings via "django.conf import settings"
  * Not using reverse (or @permalink) in get_absolute_url (?)
  * Form definitions in models.py
+ * Ignore tests
 
 Models
 ======
