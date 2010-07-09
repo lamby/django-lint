@@ -123,11 +123,6 @@ def main():
     linter = lint.PyLinter()
     linter.set_option('reports', options.report)
     linter.set_option('output-format', options.outputformat)
-    
-    if options.errors:
-        linter.set_option('disable-msg-cat', 'WCRI')
-        linter.set_option('reports', False)
-        linter.set_option('persistent', False)
 
     if options.pylint:
         checkers.initialize(linter)
@@ -135,6 +130,12 @@ def main():
             linter.disable_message(msg)
 
     AstCheckers.register(linter)
+
+    if options.errors:
+        linter.set_option('disable-msg-cat', 'WCRI')
+        linter.set_option('reports', False)
+        linter.set_option('persistent', False)
+
     linter.check([target])
 
     return linter.msg_status
