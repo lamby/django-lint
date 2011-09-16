@@ -75,6 +75,11 @@ class SettingsChecker(BaseChecker):
         except AttributeError:
             return
 
+        try:
+            xs_iterable = iter(xs)
+        except TypeError:
+            return
+
         return [(x, x.value) for x in xs if isinstance(safe_infer(x), astng.Const)]
 
     def check_middleware(self, node):
