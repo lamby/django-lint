@@ -32,6 +32,8 @@ def nodeisinstance(node, klasses, check_base_classes=True):
         val = safe_infer(base)
         if not val:
             continue
+        if isinstance(val, astng.bases._Yes):
+            continue
 
         nodes = [val]
         if check_base_classes:
