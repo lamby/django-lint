@@ -79,40 +79,41 @@ def main():
     except IndexError:
         args = ['.']
 
-    target = os.path.abspath(args[0])
+    targets = [os.path.abspath(arg) for arg in args]
 
-    if not os.path.exists(target):
-        try:
-            # Is target a module?
-            x = __import__(args[0], locals(), globals(), [], -1)
-            target = sys.modules[args[0]].__path__[0]
-        except:
-            pass
+    for target in targets:
+        if not os.path.exists(target):
+            try:
+                # Is target a module?
+                x = __import__(args[0], locals(), globals(), [], -1)
+                target = sys.modules[args[0]].__path__[0]
+            except:
+                pass
 
-    if not os.path.exists(target):
-        raise parser.error(
-            "The specified target (%r) does not exist" \
-                % target
-        )
-
-    path = target
-    while True:
-        flag = False
-        for django_file in ('manage.py', 'models.py', 'urls.py'):
-            if os.path.exists(os.path.join(path, django_file)):
-                sys.path.insert(0, os.path.dirname(path))
-                flag = True
-                break
-        if flag:
-            break
-
-        path = os.path.dirname(path)
-
-        if path == '/':
+        if not os.path.exists(target):
             raise parser.error(
-                "The specified target (%r) does not appear to be part of a " \
-                "Django application" % target
+                "The specified target (%r) does not exist" \
+                    % target
             )
+
+        path = target
+        while True:
+            flag = False
+            for django_file in ('manage.py', 'models.py', 'urls.py'):
+                if os.path.exists(os.path.join(path, django_file)):
+                    sys.path.insert(0, os.path.dirname(path))
+                    flag = True
+                    break
+            if flag:
+                break
+
+            path = os.path.dirname(path)
+
+            if path == '/':
+                raise parser.error(
+                    "The specified target (%r) does not appear to be part of a " \
+                    "Django application" % target
+                )
 
     try:
         import django
@@ -136,6 +137,6 @@ def main():
         linter.set_option('reports', False)
         linter.set_option('persistent', False)
 
-    linter.check([target])
+    linter.check(targets)
 
     return linter.msg_status
