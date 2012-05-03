@@ -127,7 +127,7 @@ def main():
     if options.pylint:
         checkers.initialize(linter)
         for msg in ('C0111', 'C0301'):
-            linter.disable_message(msg)
+            linter.disable(msg)
 
     AstCheckers.register(linter)
 
