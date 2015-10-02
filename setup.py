@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 setup_args = dict(
-    name='django_lint',
+    name='django-lint',
     packages=[
         'DjangoLint',
         'DjangoLint.AstCheckers',
