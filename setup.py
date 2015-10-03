@@ -19,6 +19,7 @@
 
 setup_args = dict(
     name='django-lint',
+    version=1,
     packages=[
         'DjangoLint',
         'DjangoLint.AstCheckers',
