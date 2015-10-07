@@ -19,7 +19,10 @@
 
 setup_args = dict(
     name='django-lint',
+    url="https://chris-lamb.co.uk/projects/django-lint",
     version=1,
+    license="BSD",
+    description="Static analysis tool for Django projects.",
     packages=[
         'DjangoLint',
         'DjangoLint.AstCheckers',
