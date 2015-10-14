@@ -20,7 +20,7 @@
 setup_args = dict(
     name='django-lint',
     url="https://chris-lamb.co.uk/projects/django-lint",
-    version='2',
+    version='2.0.1',
     license="BSD",
     description="Static analysis tool for Django projects.",
     packages=[
