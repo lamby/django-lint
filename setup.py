@@ -29,6 +29,10 @@ setup_args = dict(
     ],
     author='Chris Lamb',
     author_email='chris@chris-lamb.co.uk',
+
+    install_requires=(
+        'Django>=1.8',
+    ),
 )
 
 try:
