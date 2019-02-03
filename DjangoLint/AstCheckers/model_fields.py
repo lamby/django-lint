@@ -22,7 +22,7 @@ from pylint.interfaces import IASTNGChecker
 from pylint.checkers import BaseChecker
 from pylint.checkers.utils import safe_infer
 
-from utils import is_model
+from .utils import is_model
 
 class ModelFieldsChecker(BaseChecker):
     __implements__ = IASTNGChecker
