@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from logilab import astng
+import astroid
 
 from itertools import chain
 from pylint.checkers.utils import safe_infer
@@ -25,14 +25,14 @@ def is_model(node, **kwargs):
     return nodeisinstance(node, ('django.db.models.base.Model',), **kwargs)
 
 def nodeisinstance(node, klasses, check_base_classes=True):
-    if not isinstance(node, astng.Class):
+    if not isinstance(node, astroid.ClassDef):
         return False
 
     for base in node.bases:
         val = safe_infer(base)
         if not val:
             continue
-        if isinstance(val, astng.bases._Yes):
+        if isinstance(val, astroid.bases._Yes):
             continue
 
         nodes = [val]

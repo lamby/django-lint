@@ -16,22 +16,42 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from logilab import astng
+import astroid
 
-from pylint.interfaces import IASTNGChecker
+from pylint.interfaces import IAstroidChecker
 from pylint.checkers import BaseChecker
 from pylint.checkers.utils import safe_infer
 
 class SettingsChecker(BaseChecker):
-    __implements__ = IASTNGChecker
+    __implements__ = IAstroidChecker
 
     name = 'django_settings_checker'
     msgs = {
-        'W7001': ('Missing required field %r', '',),
-        'W7002': ('Empty %r setting', '',),
-        'W7003': ('%s after %s', ''),
-        'W7005': ('Non-absolute directory %r in TEMPLATE_DIRS', ''),
-        'W7006': ('%r in TEMPLATE_DIRS should use forward slashes', ''),
+        'W7001': (
+            'Missing required field %r',
+            'missing-required',
+            'Required field missing',
+        ),
+        'W7002': (
+            'Empty %r setting',
+            'empty-setting',
+            'Empty setting',
+        ),
+        'W7003': (
+            '%s after %s',
+            'middlware-order',
+            'Wrong middleware order',
+        ),
+        'W7005': (
+            'Non-absolute directory %r in TEMPLATE_DIRS',
+            'non-absolute-dir',
+            'Non-absolute directory',
+        ),
+        'W7006': (
+            '%r in TEMPLATE_DIRS should use forward slashes',
+            'backward-slashes',
+            'Backward slashes',
+        ),
     }
 
     def leave_module(self, node):
@@ -52,7 +72,7 @@ class SettingsChecker(BaseChecker):
             'MIDDLEWARE_CLASSES': tuple,
         }
 
-        for field, req_type in REQUIRED_FIELDS.iteritems():
+        for field, req_type in REQUIRED_FIELDS.items():
             if field not in node.locals.keys():
                 self.add_message('W7001', args=field, node=node)
                 continue
@@ -80,7 +100,7 @@ class SettingsChecker(BaseChecker):
         except TypeError:
             return
 
-        return [(x, x.value) for x in xs if isinstance(safe_infer(x), astng.Const)]
+        return [(x, x.value) for x in xs if isinstance(safe_infer(x), astroid.Const)]
 
     def check_middleware(self, node):
         middleware = self.get_constant_values(node, 'MIDDLEWARE_CLASSES')

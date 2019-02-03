@@ -18,9 +18,7 @@
 
 import os.path
 
-from logilab import astng
-
-from pylint.interfaces import IASTNGChecker
+from pylint.interfaces import IAstroidChecker
 from pylint.checkers import BaseChecker
 from pylint.checkers.utils import safe_infer
 
@@ -39,19 +37,35 @@ except ImportError:
             yield []
 
 class ModelMethodsChecker(BaseChecker):
-    __implements__ = IASTNGChecker
+    __implements__ = IAstroidChecker
 
     name = 'django_model_models'
     msgs = {
         'W8010': (
             'Too many models (%d/%d); consider splitting application',
-        '',),
-        'W8011': ('Use __unicode__ instead of __str__', '',),
-        'W8012': ('Method should come after standard model methods', '',),
-        'W8013': ('%s should come before %r', '',),
+            'many-models',
+            'To many models',
+        ),
+        'W8011': (
+            'Use __unicode__ instead of __str__',
+            'use-unicode',
+            'Use unicode',
+        ),
+        'W8012': (
+            'Method should come after standard model methods',
+            'model-mathods-first',
+            'Model methods first',
+        ),
+        'W8013': (
+            '%s should come before %r',
+            'method-first',
+            'Wrong method order',
+        ),
         'W8015': (
             '%d models have common prefix (%r) - rename or split application',
-        '',),
+            'common-prefix',
+            'Common application prefix',
+        ),
     }
 
     options = (

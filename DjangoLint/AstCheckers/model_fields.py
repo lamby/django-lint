@@ -16,48 +16,88 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from logilab import astng
+import astroid
 
-from pylint.interfaces import IASTNGChecker
+from pylint.interfaces import IAstroidChecker
 from pylint.checkers import BaseChecker
 from pylint.checkers.utils import safe_infer
 
 from .utils import is_model
 
 class ModelFieldsChecker(BaseChecker):
-    __implements__ = IASTNGChecker
+    __implements__ = IAstroidChecker
 
     name = 'django_model_fields'
     msgs = {
-        'W6000': ('%s: Nullable CharField or TextField', ''),
+        'W6000': ('%s: Nullable CharField or TextField', 'nullable', 'Nullable'),
         'W6001': (
             "%s: Naive tree structure implementation using ForeignKey('self')",
-        ''),
+            'naive-tree-structure',
+            'Naive tree structure',
+        ),
         'W6002': (
             'Model has too many fields (%d/%d); consider splitting model',
-        ''),
-        'W6003': ('Model has no fields', ''),
-        'W6004': ('%s: Field is nullable but blank=False', ''),
-        'W6005': ('%s: uses brittle unique_for_%s', ''),
-        'W6006': ('%s: ForeignKey missing related_name', ''),
+            'many-fields',
+            'Too many fields',
+        ),
+        'W6003': ('Model has no fields', 'no-fields', 'No model fields'),
+        'W6004': (
+            '%s: Field is nullable but blank=False',
+            'field-not-nullable',
+            'Field not nullable',
+        ),
+        'W6005': ('%s: uses brittle unique_for_%s', 'brittle-unique', 'Brittle unique'),
+        'W6006': (
+            '%s: ForeignKey missing related_name',
+            'missing-related-name',
+            'ForeignKey missing',
+        ),
         'W6007': (
             '%s: CharField with huge (%d/%d) max_length instead of TextField',
-        ''),
-        'W6008': ('%s: Uses superceded auto_now or auto_now_add', ''),
+            'huge-max-length',
+            'Huge charfield max_length',
+        ),
+        'W6008': (
+            '%s: Uses superceded auto_now or auto_now_add',
+            'superceded-auto',
+            'Superceded auto fields',
+        ),
         'W6009': (
             '%s: NullBooleanField instead of BooleanField with null=True',
-        ''),
-        'W6010': ('%s: %s has database-dependent limits', ''),
-        'W6011': ('%s: URLField uses verify_exists=True default', ''),
+            'nullable-boolean-field',
+            'Nullable BooleanField',
+        ),
+        'W6010': (
+            '%s: %s has database-dependent limits',
+            'database-dependend',
+            'Database dependency',
+        ),
+        'W6011': (
+            '%s: URLField uses verify_exists=True default',
+            'verify-urlfield',
+            'URLField verify exists',
+        ),
         'W6012': (
             '%s: BooleanField with default=True will not be reflected in database',
-        ''),
+            'boolean-field-default',
+            'Boolean field with default',
+        ),
         'W6013': (
             '%s: Unique ForeignKey constraint better modelled as OneToOneField',
-        ''),
-        'W6014': ('%s: primary_key=True should imply unique=True', ''),
-        'W6015': ('%s: %s=False is implicit', ''),
-        'W6016': ('%s: Nullable ManyToManyField makes no sense', ''),
+            'unique-foreign-key',
+            'Use OneToOneField',
+        ),
+        'W6014': (
+            '%s: primary_key=True should imply unique=True',
+            'non-unique-primary',
+            'Non-unique primary key',
+        ),
+        'W6015': ('%s: %s=False is implicit', 'implicit-false', 'Implicit false'),
+        'W6016': (
+            '%s: Nullable ManyToManyField makes no sense',
+            'nullable-mtm',
+            'Nullable ManyToManyField',
+        ),
     }
 
     options = (
@@ -102,7 +142,7 @@ class ModelFieldsChecker(BaseChecker):
 
         assname = '(unknown name)'
         x = node.parent.get_children().next()
-        if isinstance(x, astng.AssName):
+        if isinstance(x, astroid.AssName):
             assname = x.name
 
         self.field_count += 1
@@ -125,7 +165,7 @@ class ModelFieldsChecker(BaseChecker):
         )])
 
         for arg in node.args:
-            if not isinstance(arg, astng.Keyword):
+            if not isinstance(arg, astroid.Keyword):
                 continue
 
             for option in options.keys():
@@ -160,7 +200,7 @@ class ModelFieldsChecker(BaseChecker):
 
         elif val.name == 'ForeignKey':
             val = safe_infer(node.args[0])
-            if isinstance(val, astng.Const) and val.value == 'self':
+            if isinstance(val, astroid.Const) and val.value == 'self':
                 self.add_message('W6001', node=node, args=(assname,))
 
             elif not options['related_name']:

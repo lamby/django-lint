@@ -16,17 +16,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pylint.interfaces import IASTNGChecker
+from pylint.interfaces import IAstroidChecker
 from pylint.checkers import BaseChecker
 
 class SizeChecker(BaseChecker):
-    __implements__ = IASTNGChecker
+    __implements__ = IAstroidChecker
 
     name = 'django_size_checker'
     msgs = {
         'W8001': (
             '%r is actually a directory; consider splitting application',
-        '',),
+            'models-as-directory',
+            'Models as directory',
+        ),
     }
 
     def leave_module(self, node):

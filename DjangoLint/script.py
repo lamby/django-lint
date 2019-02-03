@@ -20,7 +20,8 @@
 import os
 import sys
 
-from pylint import checkers, lint
+from pylint import checkers, lint, reporters
+from pylint.reporters import text as text_reporter
 from optparse import OptionParser
 
 from DjangoLint import AstCheckers
@@ -122,6 +123,7 @@ def main():
         return 1
 
     linter = lint.PyLinter()
+    linter.set_reporter(text_reporter.TextReporter())
     linter.set_option('reports', options.report)
     linter.set_option('output-format', options.outputformat)
 
