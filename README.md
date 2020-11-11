@@ -1,5 +1,12 @@
 # `django-lint`
 
+## Important notice
+
+This project has been 2008 and was maintained until 2011; it has since been
+deprecated. If you wish to check out similar functionality, please see:
+
+* Richard Tier's [Django Doctor](https://django.doctor/)
+
 ## Ideas
 
 ### General
